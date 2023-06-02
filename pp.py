@@ -20,27 +20,24 @@ def data_entry():
     # Check if file already exists, create new file if not
     if not os.path.isfile(filename):
         with open(filename, "w") as f:
-            f.write("Date,Income Type,Expense Type,Comments\n")
+            f.write("Date,Income Type,Income Amount,Expense Type,Expense Amount,Comments\n")
             st.success(f"New file created: {filename}")
 
     # Take income details
     st.subheader("Income Details")
-    salary = st.number_input("Salary (USD)", min_value=0.0, step=0.01)
-    blog = st.number_input("Blog Income (USD)", min_value=0.0, step=0.01)
-    other_income = st.number_input("Other Income (USD)", min_value=0.0, step=0.01)
+    income_type = st.radio("Income Type", ["Salary", "Blog Income", "Other Income"])
+    income_amount = st.number_input("Income Amount (USD)", min_value=0.0, step=0.01)
 
     # Take expense details
     st.subheader("Expense Details")
-    rent = st.number_input("Rent (USD)", min_value=0.0, step=0.01)
-    car = st.number_input("Car Expense (USD)", min_value=0.0, step=0.01)
-    grocery = st.number_input("Grocery Expense (USD)", min_value=0.0, step=0.01)
-    other_expense = st.number_input("Other Expense (USD)", min_value=0.0, step=0.01)
+    expense_type = st.radio("Expense Type", ["Rent", "Car Expense", "Grocery Expense", "Other Expense"])
+    expense_amount = st.number_input("Expense Amount (USD)", min_value=0.0, step=0.01)
 
     comments = st.text_area("Comments")
 
     # Append data to the file
     with open(filename, "a") as f:
-        f.write(f"{date},{salary},{blog},{other_income},{rent},{car},{grocery},{other_expense},{comments}\n")
+        f.write(f"{date},{income_type},{income_amount},{expense_type},{expense_amount},{comments}\n")
     st.success("Data entry added successfully!")
 
 def display_report():
