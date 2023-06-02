@@ -23,20 +23,21 @@ def data_entry():
             f.write("Income,Type,Expense,Comments\n")
             st.success(f"New file created: {filename}")
 
-    # Take income details
-    st.subheader("Income Details")
-    income = st.number_input("Income Amount (USD)", min_value=0.0, step=0.01)
-    income_type = st.selectbox("Income Type", ["Salary", "Blog", "Other Income"])
+    # Add income and expense records
+    num_records = st.number_input("Number of Records", min_value=1, value=1, step=1)
+    for i in range(num_records):
+        st.subheader(f"Record {i+1}")
 
-    # Take expense details
-    st.subheader("Expense Details")
-    expense = st.number_input("Expense Amount (USD)", min_value=0.0, step=0.01)
-    expense_type = st.selectbox("Expense Type", ["Grocery", "Utility", "Car", "Rent", "Other"])
-    comments = st.text_area("Comments")
+        income = st.number_input("Income Amount (USD)", min_value=0.0, step=0.01)
+        income_type = st.text_input("Income Type")
+        expense = st.number_input("Expense Amount (USD)", min_value=0.0, step=0.01)
+        expense_type = st.text_input("Expense Type")
+        comments = st.text_area("Comments")
 
-    # Append data to the file
-    with open(filename, "a") as f:
-        f.write(f"{income},{income_type},{expense},{expense_type},{comments}\n")
+        # Append data to the file
+        with open(filename, "a") as f:
+            f.write(f"{income},{income_type},{expense},{expense_type},{comments}\n")
+
     st.success("Data entry added successfully!")
 
 def data_report():
