@@ -2,6 +2,7 @@ import os
 import streamlit as st
 import pandas as pd
 
+
 # Create data directory if it doesn't exist
 if not os.path.exists("data"):
     os.makedirs("data")
