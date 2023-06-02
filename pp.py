@@ -54,7 +54,7 @@ def display_report():
             dfs.append(df)
         if len(dfs) > 0:
             combined_df = pd.concat(dfs, ignore_index=True)
-            st.dataframe(combined_df)
+            st.table(combined_df)
         else:
             st.warning("No data available.")
     else:
