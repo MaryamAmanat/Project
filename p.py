@@ -1,4 +1,5 @@
 import streamlit as st
+import plotly.graph_objects as go
 
 def generate_expense_report(expenses):
     total_expenses = sum(expenses)
@@ -12,6 +13,13 @@ def generate_expense_report(expenses):
     st.write("Individual Expenses:")
     for index, expense in enumerate(expenses, start=1):
         st.write(f"Expense {index}: $", expense)
+
+def generate_expense_chart(expenses):
+    expense_labels = [f"Expense {i+1}" for i in range(len(expenses))]
+
+    fig = go.Figure(data=[go.Bar(x=expense_labels, y=expenses)])
+    fig.update_layout(title="Expense Distribution", xaxis_title="Expenses", yaxis_title="Amount")
+    st.plotly_chart(fig)
 
 def main():
     st.title("Expense Report Generator")
@@ -29,6 +37,7 @@ def main():
 
     if expense_list:
         generate_expense_report(expense_list)
+        generate_expense_chart(expense_list)
     else:
         st.write("No expenses entered.")
 
