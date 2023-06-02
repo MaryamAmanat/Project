@@ -25,6 +25,7 @@ def main():
     st.title("Expense Report Generator")
     st.write("Enter your expenses below:")
 
+    
     expense_list = []
 
     while True:
