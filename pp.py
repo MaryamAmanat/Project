@@ -48,10 +48,15 @@ def display_report():
 
     if csv_files:
         # Combine all the CSV data into a single DataFrame
-        df = pd.concat([pd.read_csv(os.path.join("data", file)) for file in csv_files])
-
-        # Display the report
-        st.dataframe(df)
+        dfs = []
+        for file in csv_files:
+            df = pd.read_csv(os.path.join("data", file))
+            dfs.append(df)
+        if len(dfs) > 0:
+            combined_df = pd.concat(dfs, ignore_index=True)
+            st.dataframe(combined_df)
+        else:
+            st.warning("No data available.")
     else:
         st.warning("No data files found.")
 
