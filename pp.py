@@ -2,7 +2,6 @@ import os
 import streamlit as st
 import pandas as pd
 
-
 # Create data directory if it doesn't exist
 if not os.path.exists("data"):
     os.makedirs("data")
@@ -21,27 +20,30 @@ def data_entry():
     # Check if file already exists, create new file if not
     if not os.path.isfile(filename):
         with open(filename, "w") as f:
-            f.write("Income,Type,Expense,Comments\n")
+            f.write("Date,Income Type,Expense Type,Comments\n")
             st.success(f"New file created: {filename}")
 
-    # Add income and expense records
-    num_records = st.number_input("Number of Records", min_value=1, value=1, step=1)
-    for i in range(num_records):
-        st.subheader(f"Record {i+1}")
+    # Take income details
+    st.subheader("Income Details")
+    salary = st.number_input("Salary (USD)", min_value=0.0, step=0.01)
+    blog = st.number_input("Blog Income (USD)", min_value=0.0, step=0.01)
+    other_income = st.number_input("Other Income (USD)", min_value=0.0, step=0.01)
 
-        income = st.number_input("Income Amount (USD)", min_value=0.0, step=0.01)
-        income_type = st.text_input("Income Type")
-        expense = st.number_input("Expense Amount (USD)", min_value=0.0, step=0.01)
-        expense_type = st.text_input("Expense Type")
-        comments = st.text_area("Comments")
+    # Take expense details
+    st.subheader("Expense Details")
+    rent = st.number_input("Rent (USD)", min_value=0.0, step=0.01)
+    car = st.number_input("Car Expense (USD)", min_value=0.0, step=0.01)
+    grocery = st.number_input("Grocery Expense (USD)", min_value=0.0, step=0.01)
+    other_expense = st.number_input("Other Expense (USD)", min_value=0.0, step=0.01)
 
-        # Append data to the file
-        with open(filename, "a") as f:
-            f.write(f"{income},{income_type},{expense},{expense_type},{comments}\n")
+    comments = st.text_area("Comments")
 
+    # Append data to the file
+    with open(filename, "a") as f:
+        f.write(f"{date},{salary},{blog},{other_income},{rent},{car},{grocery},{other_expense},{comments}\n")
     st.success("Data entry added successfully!")
 
-def data_report():
+def display_report():
     st.subheader("Data Report")
 
     # Read all the CSV files in the 'data' directory
@@ -51,19 +53,8 @@ def data_report():
         # Combine all the CSV data into a single DataFrame
         df = pd.concat([pd.read_csv(os.path.join("data", file)) for file in csv_files])
 
-        # Group the data by income type and calculate the total income
-        grouped_income = df.groupby("Type")["Income"].sum().reset_index()
-
-        # Group the data by expense type and calculate the total expense
-        grouped_expense = df.groupby("Expense")["Expense"].sum().reset_index()
-
-        # Display the income report
-        st.subheader("Income Report")
-        st.dataframe(grouped_income)
-
-        # Display the expense report
-        st.subheader("Expense Report")
-        st.dataframe(grouped_expense)
+        # Display the report
+        st.dataframe(df)
     else:
         st.warning("No data files found.")
 
@@ -71,12 +62,12 @@ def main():
     st.title("Income and Expense Tracker")
     st.write("Welcome to the Income and Expense Tracker!")
 
-    option = st.sidebar.selectbox("Select Option", ["Data Entry", "Data Report"])
+    option = st.sidebar.selectbox("Select Option", ["Data Entry", "Display Report"])
 
     if option == "Data Entry":
         data_entry()
-    elif option == "Data Report":
-        data_report()
+    elif option == "Display Report":
+        display_report()
 
 if __name__ == '__main__':
     main()
